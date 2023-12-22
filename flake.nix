@@ -6,6 +6,7 @@
     # ---- SYSTEM SETTINGS ---- #
     system = "x86_64-linux"; # system arch
     hostname = "nixos"; # hostname
+    hostid = "place-here"; # Generate hostid with command "head -c 8 /etc/machine-id"
     profile = "server"; # select a profile defined from my profiles directory
     timezone = "Asia/Manila"; # select timezone
     locale = "en_US.UTF-8"; # select locale
@@ -13,7 +14,6 @@
     # ----- USER SETTINGS ----- #
     username = "mew"; # username
     name = "mew"; # name/identifier
-    password = "inserthere"; # edit this password
     email = "redact@redact.com"; # email (used for certain configurations)
     dotfilesDir = "~/.dotfiles"; # absolute path of the local repo
     theme = "henna"; # selcted theme from my themes directory (./themes/)
@@ -62,7 +62,7 @@
             inherit username;
             inherit name;
             inherit hostname;
-            inherit password;
+            inherit hostid;
             inherit profile;
             inherit email;
             inherit dotfilesDir;
@@ -98,7 +98,7 @@
           inherit username;
           inherit name;
           inherit hostname;
-          inherit password;
+          inherit hostid;
           inherit timezone;
           inherit locale;
           inherit theme;
