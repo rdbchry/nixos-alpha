@@ -65,16 +65,20 @@
       loader = { 
         grub = {
           enable = true;
-          device = "nodev";
+          # device = "nodev";
           zfsSupport = true;
           efiSupport = true;
+          efiInstallAsRemovable = true;
+          mirroredBoots = [
+            { devices = [ "nodev" ]; path = "/boot"; }
+          ];
           useOSProber = true;
           configurationLimit = 5;
         };
-        efi = {
-          canTouchEfiVariables = true;
-          efiSysMountPoint = "/boot";
-        };
+        #efi = {
+        #  canTouchEfiVariables = true;
+        #  efiSysMountPoint = "/boot";
+        #};
       };
       kernelPackages = pkgs.linuxPackages_latest;
   };
