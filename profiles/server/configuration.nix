@@ -6,7 +6,6 @@
 {
   imports =
     [ ../../system/hardware-configuration.nix
-      ../../system/hardware/systemd.nix # systemd config
       ../../system/hardware/opengl.nix
       ../../system/hardware/printing.nix
       ../../system/hardware/bluetooth.nix
@@ -66,7 +65,12 @@
       loader = { 
         grub = {
           enable = true;
-          device = "/dev/sda";
+          zfsSupport = true;
+          efiSupport = true;
+          efiInstallAsRemovable = true;
+          mirroredBoots = [
+            {  devices = [ "nodev" ]; path = "/boot"; }
+          ];
           useOSProber = true;
           configurationLimit = 5;
         };
