@@ -6,6 +6,7 @@
 {
   imports =
     [ ../../system/hardware-configuration.nix
+      ../../system/hardware/systemd.nix
       ../../system/hardware/opengl.nix
       ../../system/hardware/printing.nix
       ../../system/hardware/bluetooth.nix
@@ -55,33 +56,23 @@
   };
 
   # Kernel modules
-  #boot.kernelModules = [ "i2c-dev" "i2c-piix4" "cpufreq_powersave" ];
+  boot.initrd.kernelModules = [ "zfs" ];
 
   # Bootloader
-  #boot.loader.systemd-boot.enable = true;
-  #boot.loader.efi.canTouchEfiVariables = true;
-  #boot.loader.efi.efiSysMountPoint = "/boot/efi";
-  boot = {
-      loader = { 
-        grub = {
-          enable = true;
-          # device = "nodev";
-          zfsSupport = true;
-          efiSupport = true;
-          efiInstallAsRemovable = true;
-          mirroredBoots = [
-            { devices = [ "nodev" ]; path = "/boot"; }
-          ];
-          useOSProber = true;
-          configurationLimit = 5;
-        };
-        #efi = {
-        #  canTouchEfiVariables = true;
-        #  efiSysMountPoint = "/boot";
-        #};
-      };
-      kernelPackages = pkgs.linuxPackages_latest;
-  };
+  boot.loader.systemd-boot.enable = true;
+  boot.loader.efi.canTouchEfiVariables = true;
+  boot.loader.efi.efiSysMountPoint = "/boot";
+
+  # Specify your ZFS pool and root dataset
+  boot.initrd.zfs.root = "rpool/local/root";
+  boot.initrd.zfs.forceImportRoot = true;
+
+  boot.supportedFilesystems = [ "zfs" ];
+
+  # Specify the boot.loader.entryPath for systemd-boot
+  boot.loader.efi.systemd-boot.enable = true;
+  boot.loader.efi.systemd-boot.loader = "systemd-boot";
+  boot.loader.efi.systemd-boot.timeout = 5; # Set to 0 for no timeout
 
   # Networking
   networking.hostId = hostid; # Generate hostid with command <head -c 8 /etc/machine-id>
