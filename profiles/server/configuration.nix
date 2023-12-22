@@ -62,17 +62,11 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
   boot.loader.efi.efiSysMountPoint = "/boot";
+  boot.loader.timeout = 5;
 
   # Specify your ZFS pool and root dataset
-  boot.initrd.zfs.root = "rpool/local/root";
   boot.initrd.zfs.forceImportRoot = true;
-
   boot.supportedFilesystems = [ "zfs" ];
-
-  # Specify the boot.loader.entryPath for systemd-boot
-  boot.loader.efi.systemd-boot.enable = true;
-  boot.loader.efi.systemd-boot.loader = "systemd-boot";
-  boot.loader.efi.systemd-boot.timeout = 5; # Set to 0 for no timeout
 
   # Networking
   networking.hostId = hostid; # Generate hostid with command <head -c 8 /etc/machine-id>
