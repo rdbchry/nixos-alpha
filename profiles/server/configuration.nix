@@ -2,7 +2,7 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, lib, pkgs, blocklist-hosts, username, name, hostname, password, timezone, locale, wm, theme, ... }:
+{ config, lib, pkgs, blocklist-hosts, username, name, hostname, hostid, timezone, locale, wm, theme, ... }:
 {
   imports =
     [ ../../system/hardware-configuration.nix
@@ -65,20 +65,22 @@
       loader = { 
         grub = {
           enable = true;
+          device = "nodev";
           zfsSupport = true;
           efiSupport = true;
-          efiInstallAsRemovable = true;
-          mirroredBoots = [
-            {  devices = [ "nodev" ]; path = "/boot"; }
-          ];
           useOSProber = true;
           configurationLimit = 5;
+        };
+        efi = {
+          canTouchEfiVariables = true;
+          efiSysMountPoint = "/boot";
         };
       };
       kernelPackages = pkgs.linuxPackages_latest;
   };
 
   # Networking
+  networking.hostId = hostid; # Generate hostid with command <head -c 8 /etc/machine-id>
   networking.hostName = hostname; # Define your hostname.
   networking.networkmanager.enable = true; # Use networkmanager
 
@@ -102,7 +104,6 @@
     isNormalUser = true;
     description = name;
     extraGroups = [ "networkmanager" "wheel" ];
-    initialPassword = password;
     packages = with pkgs; [];
     uid = 1000;
   };
